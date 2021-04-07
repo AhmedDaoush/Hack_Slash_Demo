@@ -24,12 +24,19 @@ class HACK_SLASH_API IDamageable
 public:
 
 	float Health = 100.0f;
-	float MaxHealth = 100;
+	float MaxHealth = 100.0f;
 	UFUNCTION(BlueprintCallable, BlueprintNativeEvent)
 	float GetHealth();
 
 	UFUNCTION(BlueprintCallable, BlueprintNativeEvent)
 	float GetMaxHealth();
+
+	UFUNCTION(BlueprintCallable, BlueprintNativeEvent)
+	bool IsDead();
+
+	virtual bool IsDead_Implementation(){
+		return Health <= 0.01f;
+	};
 
 	virtual void ChangeHealth(float delta);
 private:

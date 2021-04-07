@@ -24,6 +24,7 @@ public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
+	UFUNCTION(BlueprintCallable)
 	void OnAttackRequest();
 	void OnAttackCooledDown();
 
@@ -33,7 +34,8 @@ public:
 		bool bAttacking = false;
 	UPROPERTY(Blueprintreadwrite)
 		bool bCanMove = true;
-
+	UPROPERTY(Blueprintreadonly)
+		bool bCanAttack = true;
 	// Inherited via IDamageable
 
 	virtual float GetMaxHealth_Implementation() override { return MaxHealth; };
@@ -42,6 +44,11 @@ public:
 
 	virtual void InitMaxHealth() override { MaxHealth = InitialMaxHealth; };
 
+	virtual bool IsDead_Implementation() override {
+		bool bDead = (Health <= 0.01f);
+		if(bDead) bCanMove = false;
+		return bDead;
+	};
 private:
 	UPROPERTY(EditDefaultsOnly)
 		float InitialMaxHealth = 100;
@@ -49,7 +56,6 @@ private:
 	UPROPERTY(EditDefaultsOnly)
 		float AttackCoolDown = 5.0f;
 
-	bool bCanAttack = true;
 	FTimerHandle CDTimer;
 
 

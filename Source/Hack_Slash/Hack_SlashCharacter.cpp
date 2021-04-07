@@ -99,11 +99,16 @@ void AHack_SlashCharacter::BeginPlay()
 
 void AHack_SlashCharacter::OnOverlapBegin(UPrimitiveComponent* OverlappedComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
 {
+	if (OtherComp->ComponentHasTag("EnemyWeapon"))
+	{
+		Health -= 20;
+	}
 	AHealthPack *HealthPack = Cast<AHealthPack>(OtherActor);
 	if (HealthPack)
 	{
 		ChangeHealth(HealthPack->GetValue());
 	}
+
 }
 
 void AHack_SlashCharacter::MoveForward(float Value)

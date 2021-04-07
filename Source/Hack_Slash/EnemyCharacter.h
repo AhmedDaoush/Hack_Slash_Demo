@@ -5,6 +5,7 @@
 #include "CoreMinimal.h"
 #include "GameFramework/Character.h"
 #include "Hack_SlashCharacterBase.h"
+#include "AIController.h"
 #include "EnemyCharacter.generated.h"
 
 UCLASS()
@@ -23,6 +24,13 @@ protected:
 public:	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
+
+	virtual bool IsDead_Implementation() override {
+		bool bDead = Super::IsDead_Implementation();
+		AAIController* AIController = GetController<AAIController>();
+		if (AIController && bDead) AIController->UnPossess();
+		return bDead;
+	};
 
 
 
