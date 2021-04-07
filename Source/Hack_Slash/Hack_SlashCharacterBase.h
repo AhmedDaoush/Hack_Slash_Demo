@@ -27,7 +27,7 @@ public:
 	UFUNCTION(BlueprintCallable)
 	void OnAttackRequest();
 	void OnAttackCooledDown();
-
+	float GetDamage() { return Damage; }
 	UPROPERTY(Blueprintreadwrite)
 		bool bStartAttack = false;
 	UPROPERTY(Blueprintreadwrite)
@@ -45,7 +45,6 @@ public:
 	virtual void InitMaxHealth() override { MaxHealth = InitialMaxHealth; };
 
 	virtual bool IsDead_Implementation() override {
-		bool bDead = (Health <= 0.01f);
 		if(bDead) bCanMove = false;
 		return bDead;
 	};
@@ -55,6 +54,9 @@ private:
 
 	UPROPERTY(EditDefaultsOnly)
 		float AttackCoolDown = 5.0f;
+
+	UPROPERTY(EditDefaultsOnly)
+		float Damage = 20;
 
 	FTimerHandle CDTimer;
 

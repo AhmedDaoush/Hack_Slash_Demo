@@ -26,16 +26,15 @@ public:
 	virtual void Tick(float DeltaTime) override;
 
 	virtual bool IsDead_Implementation() override {
-		bool bDead = Super::IsDead_Implementation();
+		Super::IsDead_Implementation();
 		AAIController* AIController = GetController<AAIController>();
 		if (AIController && bDead) AIController->UnPossess();
 		return bDead;
 	};
 
 
-
 private:
-
+	virtual void OnDead() override;
 	UFUNCTION()
 		void OnOverlapBegin(UPrimitiveComponent* OverlappedComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult);
 

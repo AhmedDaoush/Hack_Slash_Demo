@@ -23,8 +23,7 @@ class HACK_SLASH_API IDamageable
 	// Add interface functions to this class. This is the class that will be inherited to implement this interface.
 public:
 
-	float Health = 100.0f;
-	float MaxHealth = 100.0f;
+
 	UFUNCTION(BlueprintCallable, BlueprintNativeEvent)
 	float GetHealth();
 
@@ -33,12 +32,14 @@ public:
 
 	UFUNCTION(BlueprintCallable, BlueprintNativeEvent)
 	bool IsDead();
-
 	virtual bool IsDead_Implementation(){
-		return Health <= 0.01f;
+		return bDead;
 	};
-
+	virtual void OnDead() { };
 	virtual void ChangeHealth(float delta);
-private:
+	bool bDead = false;
+protected:
+	float Health = 100.0f;
+	float MaxHealth = 100.0f;
 	virtual void InitMaxHealth() = 0;
 };

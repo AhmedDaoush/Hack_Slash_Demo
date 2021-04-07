@@ -4,7 +4,8 @@
 #include "EnemyCharacter.h"
 #include "Components/CapsuleComponent.h"
 #include "Hack_SlashCharacter.h"
-
+#include "Kismet/GameplayStatics.h"
+#include "Hack_SlashGameMode.h"
 
 // Sets default values
 AEnemyCharacter::AEnemyCharacter()
@@ -29,14 +30,20 @@ void AEnemyCharacter::Tick(float DeltaTime)
 
 }
 
+void AEnemyCharacter::OnDead()
+{
+	AHack_SlashGameMode* gamemode = Cast<AHack_SlashGameMode>(UGameplayStatics::GetGameMode(GetWorld()));
+	gamemode->OnZombieDeath();
+}
+
 void AEnemyCharacter::OnOverlapBegin(UPrimitiveComponent* OverlappedComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
 {
-	AHack_SlashCharacter* hero = Cast<AHack_SlashCharacter>(OtherActor);
-	if (hero && hero->bAttacking)
+	AHack_SlashCharacterBase* character = Cast<AHack_SlashCharacterBase>(OtherActor);
+	if (character && character->bAttacking)
 	{
 		if (OtherComp->ComponentHasTag("Weapon"))
 		{
-			ChangeHealth(-20);
+			ChangeHealth(-character->GetDamage());
 		}
 	}
 	

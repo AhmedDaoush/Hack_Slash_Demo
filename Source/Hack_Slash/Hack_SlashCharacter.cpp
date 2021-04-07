@@ -11,6 +11,9 @@
 #include "HeadMountedDisplayFunctionLibrary.h"
 #include "Materials/Material.h"
 #include "HealthPack.h"
+#include "EnemyCharacter.h"
+#include "Kismet/GameplayStatics.h"
+#include "Hack_SlashGameMode.h"
 #include "Engine/World.h"
 
 AHack_SlashCharacter::AHack_SlashCharacter()
@@ -101,7 +104,11 @@ void AHack_SlashCharacter::OnOverlapBegin(UPrimitiveComponent* OverlappedComp, A
 {
 	if (OtherComp->ComponentHasTag("EnemyWeapon"))
 	{
-		Health -= 20;
+		AHack_SlashCharacterBase* character = Cast<AHack_SlashCharacterBase>(OtherActor);
+		if (character && character->bAttacking)
+		{
+			ChangeHealth(-character->GetDamage());
+		}
 	}
 	AHealthPack *HealthPack = Cast<AHealthPack>(OtherActor);
 	if (HealthPack)
@@ -130,5 +137,13 @@ void AHack_SlashCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInpu
 	PlayerInputComponent->BindAxis("MoveForward", this, &AHack_SlashCharacter::MoveForward);
 	PlayerInputComponent->BindAxis("MoveRight", this, &AHack_SlashCharacter::MoveRight);
 	PlayerInputComponent->BindAction("Attack", EInputEvent::IE_Pressed, this, &AHack_SlashCharacter::OnAttackRequest);
+}
+
+void AHack_SlashCharacter::OnDead()
+{
+	bCanMove = false;
+	AHack_SlashGameMode* gamemode = Cast<AHack_SlashGameMode>(UGameplayStatics::GetGameMode(GetWorld()));
+
+	gamemode->OnGameLose();
 }
 

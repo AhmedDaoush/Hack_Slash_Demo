@@ -51,6 +51,7 @@ private:
 	void MoveRight(float Value);
 
 	virtual void SetupPlayerInputComponent(UInputComponent* PlayerInputComponent) override;
+	virtual void OnDead() override;
 
 
 };
